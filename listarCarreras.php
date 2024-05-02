@@ -1,5 +1,4 @@
 <?php
-// Incluye la conexión a la base de datos
 include 'conexion.php';
 
 // Habilitar CORS

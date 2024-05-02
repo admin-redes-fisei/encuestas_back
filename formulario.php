@@ -7,25 +7,9 @@ header("Access-Control-Allow-Credentials: true");
 // Recibe el ID del formulario
 $formularioId = $_GET['alias'];
 
+include 'conexion.php';
+
 try {
-    // Conexión a la base de datos MySQL
-    //$servername = "172.21.123.36";
-    //$username = "laravel";
-    //$password = "HatunSoft@2023";
-    //$dbname = "encuestasdb";
-    $servername = "localhost";
-    $port = "3308";
-    $username = "root";
-    $password = "";
-    $dbname = "encuestasdb";
-
-    $mysqli = new mysqli($servername, $username, $password, $dbname, $port);
-
-    // Verificar la conexión
-    if ($mysqli->connect_error) {
-        die("Error en la conexión a la base de datos: " . $mysqli->connect_error);
-    }
-
     // Consulta SQL para obtener las preguntas y opciones de respuesta del formulario específico
     $sql = "SELECT f.for_id, s.sec_nombre AS seccion, p.pre_id AS id, p.pre_numero AS question_number, p.pre_alias, p.pre_titulo AS title, p.pre_texto AS question, p.pre_es_obligatoria as requerida, 
                 COALESCE(JSON_ARRAYAGG(JSON_OBJECT('id', o.opc_id,'question_option', o.opc_numero,'name', 
@@ -41,28 +25,21 @@ try {
             GROUP BY p.pre_id, p.pre_numero, p.pre_titulo, p.pre_alias, p.pre_tipo 
             ORDER BY s.sec_numero, p.pre_numero;";
 
-    $stmt = $mysqli->prepare($sql);
-    $stmt->bind_param("s", $formularioId);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $rows = $result->fetch_all(MYSQLI_ASSOC);
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([$formularioId]);
+    $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     // Decodificar las cadenas JSON en la respuesta
     foreach ($rows as &$row) {
         $row['options'] = json_decode($row['options']);
     }
 
-    // Cerrar la conexión a la base de datos
-    $stmt->close();
-    $mysqli->close();
-
     // Respuesta con las preguntas en formato JSON
     http_response_code(200);
     echo json_encode($rows);
-} catch (Exception $e) {
+} catch (PDOException $e) {
     // Error al obtener las preguntas
     http_response_code(500);
     echo json_encode(["error" => "Error al obtener las preguntas"]);
 }
-
 ?>
