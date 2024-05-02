@@ -6,7 +6,7 @@ $dbname = 'encuestasdb';
 $username = 'root';
 $password = '';*/
 
-$host = '172.21.123.36';
+$host = 'localhost';
 $dbname = 'encuestasdb';
 $username = 'laravel';
 $password = 'HatunSoft@2023';
