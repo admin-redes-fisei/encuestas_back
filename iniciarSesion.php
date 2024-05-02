@@ -21,11 +21,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $aud = $data['aud'];
 
         if ($aud == $aud_org) {
-            $consulta = $pdo->prepare("SELECT usu_nombres, usu_apellidos, usu_correo, usu_estado, usu_permisos FROM usuarios WHERE usu_correo = ?");
+            $consulta = $pdo->prepare("SELECT usu_nombres, usu_apellidos, usu_correo, usu_estado, usu_permisos, usu_clave FROM usuarios WHERE usu_correo = ?");
             $consulta->execute([$usuario]);
             
         }else {
-            $consulta = $pdo->prepare("SELECT usu_nombres, usu_apellidos, usu_correo, usu_estado, usu_permisos, usu_clave FROM usuarios WHERE (usu_correo = ? OR usu_usuario = ?)");
+            $consulta = $pdo->prepare("SELECT usu_nombres, usu_apellidos, usu_correo, usu_estado, usu_permisos, usu_clave FROM usuarios WHERE usu_correo = ? OR usu_usuario = ?");
             $consulta->execute([$usuario, $usuario]);
         }
 
@@ -33,9 +33,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if ($consulta->rowCount() > 0) {
             $datos_usuario = $consulta->fetch(PDO::FETCH_ASSOC);
             $hash_guardado = $datos_usuario['usu_clave'];
-                
-            // Compara la contraseña en texto plano con el hash almacenado usando password_verify
-            $contrasena_correcta = password_verify($contrasena, $hash_guardado);
+            $contrasena_correcta = false;
+
+            if ($aud == $aud_org) {
+                $contrasena_correcta = true;
+            }else{
+                $contrasena_correcta = password_verify($contrasena, $hash_guardado);
+            }
 
             if ($contrasena_correcta) {
                 // Genera el token (simulado)
