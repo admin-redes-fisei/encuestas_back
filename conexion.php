@@ -1,15 +1,15 @@
 <?php
 // Datos de conexión a la base de datos
-$host = 'localhost';
+/*$host = 'localhost';
 $port = '3308';
 $dbname = 'encuestasdb';
 $username = 'root';
-$password = '';
+$password = '';*/
 
-//$host = '172.21.123.36';
-//$dbname = 'encuestasdb';
-//$username = 'laravel';
-//$password = 'HatunSoft@2023';
+$host = '172.21.123.36';
+$dbname = 'encuestasdb';
+$username = 'laravel';
+$password = 'HatunSoft@2023';
 
 try {
     // Conexión PDO
