@@ -15,13 +15,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $datos = json_decode(file_get_contents("php://input"), true);
 
     // Prepara la consulta SQL para el INSERT
-    $consulta = $pdo->prepare("INSERT INTO carreras (car_nombre, car_estado, car_facultad_pertenece, car_eliminado, car_fecha_creacion) 
-    VALUES (:car_nombre, :car_estado, :car_facultad_pertenece, 0, NOW())");
+    $consulta = $pdo->prepare("UPDATE opciones SET opc_eliminado = 0 WHERE opc_id = :opc_id");
 
     // Enlaza los parámetros
-    $consulta->bindParam(':car_nombre', $datos['car_nombre']);
-    $consulta->bindParam(':car_estado', $datos['car_estado']);
-    $consulta->bindParam(':car_facultad_pertenece', $datos['car_facultad_pertenece']);
+    $consulta->bindParam(':opc_id', $datos['opc_id']);
 
     // Ejecuta la consulta
     if ($consulta->execute()) {
@@ -29,7 +26,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo json_encode(array("mensaje" => "OK"));
     } else {
         http_response_code(500); // Internal Server Error
-        echo json_encode(array("error" => "Error al crear la carrera"));
+        echo json_encode(array("error" => "Error al eliminar la carrera"));
     }
 } else {
     // Método no permitido

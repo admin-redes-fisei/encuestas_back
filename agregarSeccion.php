@@ -15,13 +15,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $datos = json_decode(file_get_contents("php://input"), true);
 
     // Prepara la consulta SQL para el INSERT
-    $consulta = $pdo->prepare("INSERT INTO carreras (car_nombre, car_estado, car_facultad_pertenece, car_eliminado, car_fecha_creacion) 
-    VALUES (:car_nombre, :car_estado, :car_facultad_pertenece, 0, NOW())");
+    $consulta = $pdo->prepare("INSERT INTO secciones (sec_numero, sec_nombre, sec_estado, sec_eliminado, sec_formulario_pertenece, sec_fecha_creacion) 
+    VALUES (:sec_numero, :sec_nombre, 1, 0, :sec_formulario_pertenece, NOW())");
 
     // Enlaza los parámetros
-    $consulta->bindParam(':car_nombre', $datos['car_nombre']);
-    $consulta->bindParam(':car_estado', $datos['car_estado']);
-    $consulta->bindParam(':car_facultad_pertenece', $datos['car_facultad_pertenece']);
+    $consulta->bindParam(':sec_numero', $datos['sec_numero']);
+    $consulta->bindParam(':sec_nombre', $datos['sec_nombre']);
+    $consulta->bindParam(':sec_formulario_pertenece', $datos['sec_formulario_pertenece']);
 
     // Ejecuta la consulta
     if ($consulta->execute()) {

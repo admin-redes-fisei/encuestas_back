@@ -18,8 +18,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $hashed_password = password_hash($datos['usu_clave'], PASSWORD_DEFAULT);
 
     // Prepara la consulta SQL para el INSERT
-    $consulta = $pdo->prepare("INSERT INTO usuarios (usu_cedula, usu_nombres, usu_apellidos, usu_correo, usu_usuario, usu_clave, usu_tipo, usu_permisos, usu_estado, usu_eliminado, usu_fecha_creacion) 
-    VALUES (:usu_cedula, :usu_nombres, :usu_apellidos, :usu_correo, :usu_usuario, :usu_clave, :usu_tipo, :usu_permisos, :usu_estado, 0, NOW())");
+    $consulta = $pdo->prepare("INSERT INTO usuarios (usu_cedula, usu_nombres, usu_apellidos, usu_correo, usu_usuario, usu_clave, usu_tipo, usu_permisos, usu_estado, usu_facultad_pertenece, usu_eliminado, usu_fecha_creacion) 
+    VALUES (:usu_cedula, :usu_nombres, :usu_apellidos, :usu_correo, :usu_usuario, :usu_clave, :usu_tipo, :usu_permisos, :usu_estado, :usu_facultad_pertenece, 0, NOW())");
 
     // Enlaza los parámetros
     $consulta->bindParam(':usu_cedula', $datos['usu_cedula']);
@@ -31,6 +31,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $consulta->bindParam(':usu_tipo', $datos['usu_tipo']);
     $consulta->bindParam(':usu_permisos', $datos['usu_permisos']);
     $consulta->bindParam(':usu_estado', $datos['usu_estado']);
+    $consulta->bindParam(':usu_facultad_pertenece', $datos['usu_facultad_pertenece']);
 
     // Ejecuta la consulta
     if ($consulta->execute()) {

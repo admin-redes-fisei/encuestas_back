@@ -21,11 +21,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $aud = $data['aud'];
 
         if ($aud == $aud_org) {
-            $consulta = $pdo->prepare("SELECT usu_nombres, usu_apellidos, usu_correo, usu_estado, usu_permisos, usu_clave FROM usuarios WHERE usu_correo = ?");
+            $consulta = $pdo->prepare("SELECT u.usu_nombres, u.usu_apellidos, u.usu_correo, u.usu_estado, u.usu_permisos, 
+            u.usu_clave, u.usu_facultad_pertenece, f.fac_nombre
+            FROM usuarios u
+            JOIN facultades f ON u.usu_facultad_pertenece = f.fac_id
+            WHERE usu_correo = ?");
             $consulta->execute([$usuario]);
             
         }else {
-            $consulta = $pdo->prepare("SELECT usu_nombres, usu_apellidos, usu_correo, usu_estado, usu_permisos, usu_clave FROM usuarios WHERE usu_correo = ? OR usu_usuario = ?");
+            $consulta = $pdo->prepare("SELECT u.usu_nombres, u.usu_apellidos, u.usu_correo, u.usu_estado, u.usu_permisos, 
+            u.usu_clave, u.usu_facultad_pertenece, f.fac_nombre
+            FROM usuarios u
+            JOIN facultades f ON u.usu_facultad_pertenece = f.fac_id
+            WHERE usu_correo = ? 
+            OR usu_usuario = ?");
             $consulta->execute([$usuario, $usuario]);
         }
 

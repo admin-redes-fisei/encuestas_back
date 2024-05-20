@@ -15,13 +15,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $datos = json_decode(file_get_contents("php://input"), true);
 
     // Prepara la consulta SQL para el INSERT
-    $consulta = $pdo->prepare("INSERT INTO carreras (car_nombre, car_estado, car_facultad_pertenece, car_eliminado, car_fecha_creacion) 
-    VALUES (:car_nombre, :car_estado, :car_facultad_pertenece, 0, NOW())");
+    $consulta = $pdo->prepare("UPDATE opciones SET opc_numero = :opc_numero, opc_label = :opc_label, 
+    opc_padre = :opc_padre, opc_tooltip_texto = :opc_tooltip_texto, opc_tooltip_imagen = :opc_tooltip_imagen,
+    opc_pregunta_pertenece = :opc_pregunta_pertenece
+    WHERE opc_id = :opc_id");
 
     // Enlaza los parámetros
-    $consulta->bindParam(':car_nombre', $datos['car_nombre']);
-    $consulta->bindParam(':car_estado', $datos['car_estado']);
-    $consulta->bindParam(':car_facultad_pertenece', $datos['car_facultad_pertenece']);
+    $consulta->bindParam(':opc_numero', $datos['opc_numero']);
+    $consulta->bindParam(':opc_label', $datos['opc_label']);
+    $consulta->bindParam(':opc_padre', $datos['opc_padre']);
+    $consulta->bindParam(':opc_tooltip_texto', $datos['opc_tooltip_texto']);
+    $consulta->bindParam(':opc_tooltip_imagen', $datos['opc_tooltip_imagen']);
+    $consulta->bindParam(':opc_pregunta_pertenece', $datos['opc_pregunta_pertenece']);
+    $consulta->bindParam(':opc_id', $datos['opc_id']);
 
     // Ejecuta la consulta
     if ($consulta->execute()) {
@@ -29,7 +35,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo json_encode(array("mensaje" => "OK"));
     } else {
         http_response_code(500); // Internal Server Error
-        echo json_encode(array("error" => "Error al crear la carrera"));
+        echo json_encode(array("error" => "Error al editar la opcion"));
     }
 } else {
     // Método no permitido

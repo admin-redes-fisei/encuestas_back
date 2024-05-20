@@ -17,7 +17,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Prepara la consulta SQL para el INSERT
     $consulta = $pdo->prepare("UPDATE usuarios SET usu_cedula = :usu_cedula, usu_nombres = :usu_nombres, usu_apellidos = :usu_apellidos, 
     usu_correo = :usu_correo, usu_usuario = :usu_usuario, usu_tipo = :usu_tipo, usu_permisos = :usu_permisos, 
-    usu_estado = :usu_estado WHERE usu_id = :usu_id");
+    usu_estado = :usu_estado, usu_facultad_pertenece = :usu_facultad_pertenece WHERE usu_id = :usu_id");
 
     // Enlaza los parámetros
     $consulta->bindParam(':usu_cedula', $datos['usu_cedula']);
@@ -29,6 +29,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $consulta->bindParam(':usu_permisos', $datos['usu_permisos']);
     $consulta->bindParam(':usu_estado', $datos['usu_estado']);
     $consulta->bindParam(':usu_id', $datos['usu_id']);
+    $consulta->bindParam(':usu_facultad_pertenece', $datos['usu_facultad_pertenece']);
 
     // Ejecuta la consulta
     if ($consulta->execute()) {
