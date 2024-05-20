@@ -32,7 +32,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
                 $seccion_id = $seccion['sec_id'];
 
                 // Consulta para obtener las preguntas de cada sección
-                $consultaPreguntas = $pdo->prepare("SELECT * FROM preguntas WHERE pre_seccion_pertenece = :seccion_id AND pre_eliminado = 0");
+                $consultaPreguntas = $pdo->prepare("SELECT * FROM preguntas WHERE pre_seccion_pertenece = :seccion_id AND pre_eliminado = 0 ORDER BY pre_numero");
                 $consultaPreguntas->bindParam(':seccion_id', $seccion_id);
                 $consultaPreguntas->execute();
                 $preguntas = $consultaPreguntas->fetchAll(PDO::FETCH_ASSOC);
