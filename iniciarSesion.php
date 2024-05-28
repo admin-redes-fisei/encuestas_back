@@ -22,17 +22,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         if ($aud == $aud_org) {
             $consulta = $pdo->prepare("SELECT u.usu_nombres, u.usu_apellidos, u.usu_correo, u.usu_estado, u.usu_permisos, 
-            u.usu_clave, u.usu_facultad_pertenece, f.fac_nombre
+            u.usu_clave, u.usu_facultad_pertenece, f.fac_nombre, u.usu_tipo
             FROM usuarios u
-            JOIN facultades f ON u.usu_facultad_pertenece = f.fac_id
+            LEFT JOIN facultades f ON u.usu_facultad_pertenece = f.fac_id
             WHERE usu_correo = ?");
             $consulta->execute([$usuario]);
             
         }else {
             $consulta = $pdo->prepare("SELECT u.usu_nombres, u.usu_apellidos, u.usu_correo, u.usu_estado, u.usu_permisos, 
-            u.usu_clave, u.usu_facultad_pertenece, f.fac_nombre
+            u.usu_clave, u.usu_facultad_pertenece, f.fac_nombre, u.usu_tipo
             FROM usuarios u
-            JOIN facultades f ON u.usu_facultad_pertenece = f.fac_id
+            LEFT JOIN facultades f ON u.usu_facultad_pertenece = f.fac_id
             WHERE usu_correo = ? 
             OR usu_usuario = ?");
             $consulta->execute([$usuario, $usuario]);
@@ -67,7 +67,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         
         // Usuario no encontrado o contraseña incorrecta
         http_response_code(401); // Unauthorized
-        echo json_encode(array("mensaje" => "Usuario o contraseña incorrectos"));
+        //echo json_encode(array("mensaje" => "Usuario o contraseña incorrectos"));
+        echo json_encode($consulta);
     } else {
         http_response_code(400); // Bad Request
         echo json_encode(array("mensaje" => "Datos incompletos o incorrectos"));

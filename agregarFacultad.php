@@ -31,9 +31,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $demandaAlias = "demanda-estudiantes-" . $datos['fac_siglas'];
 
         // Prepara la consulta SQL para insertar los formularios relacionados a la facultad
-        $consultaFormulario = $pdo->prepare("INSERT INTO formularios (for_nombre, for_alias, for_tipo, for_facultad_pertenece, for_fecha_creacion) 
-        VALUES ('Encuesta de Empleabilidad', :empleabilidad, 'empresas', :for_facultad_pertenece, NOW()),
-        ('Encuesta de Demanda Estudiantil', :demanda, 'estudiantes', :for_facultad_pertenece, NOW())");
+        $consultaFormulario = $pdo->prepare("INSERT INTO formularios (for_nombre, for_alias, for_tipo, for_estado, for_facultad_pertenece, for_fecha_creacion) 
+        VALUES ('Encuesta de Empleabilidad', :empleabilidad, 'empresas', 1, :for_facultad_pertenece, NOW()),
+        ('Encuesta de Demanda Estudiantil', :demanda, 'estudiantes', 1, :for_facultad_pertenece, NOW())");
 
         $consultaFormulario->bindParam(':empleabilidad', $empleabilidadAlias);
         $consultaFormulario->bindParam(':demanda', $demandaAlias);

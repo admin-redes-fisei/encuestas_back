@@ -19,7 +19,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
         // Prepara la consulta SQL con los parámetros proporcionados
         $consulta = $pdo->prepare("SELECT for_id
         FROM formularios
-        WHERE for_facultad_pertenece = :facultad_id AND for_tipo = :tipo_formulario");
+        WHERE for_facultad_pertenece = :facultad_id AND for_tipo = :tipo_formulario AND for_estado = 1");
         $consulta->bindParam(':facultad_id', $facultad_id);
         $consulta->bindParam(':tipo_formulario', $tipo_formulario);
         $consulta->execute();

@@ -15,15 +15,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $datos = json_decode(file_get_contents("php://input"), true);
 
     // Prepara la consulta SQL para el INSERT
-    $consulta = $pdo->prepare("UPDATE formularios SET for_nombre = :for_nombre, for_alias = :for_alias, for_tipo = :for_tipo,
-    for_descripcion = :for_descripcion, for_fecha_creacion = NOW() WHERE for_id = :for_id");
+    $consulta = $pdo->prepare("INSERT INTO formularios (for_nombre, for_alias, for_descripcion, for_tipo, for_estado, for_facultad_pertenece, for_fecha_creacion) 
+        VALUES (:for_nombre, :for_alias, :for_descripcion, :for_tipo, :for_estado, :for_facultad_pertenece, NOW())");
 
     // Enlaza los parámetros
     $consulta->bindParam(':for_nombre', $datos['for_nombre']);
     $consulta->bindParam(':for_alias', $datos['for_alias']);
-    $consulta->bindParam(':for_tipo', $datos['for_tipo']);
     $consulta->bindParam(':for_descripcion', $datos['for_descripcion']);
-    $consulta->bindParam(':for_id', $datos['for_id']);
+    $consulta->bindParam(':for_tipo', $datos['for_tipo']);
+    $consulta->bindParam(':for_estado', $datos['for_estado']);
+    $consulta->bindParam(':for_facultad_pertenece', $datos['for_facultad_pertenece']);
 
     // Ejecuta la consulta
     if ($consulta->execute()) {
@@ -31,7 +32,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo json_encode(array("mensaje" => "OK"));
     } else {
         http_response_code(500); // Internal Server Error
-        echo json_encode(array("error" => "Error al eliminar la facultad"));
+        echo json_encode(array("error" => "Error al crear la carrera"));
     }
 } else {
     // Método no permitido

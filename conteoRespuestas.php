@@ -17,7 +17,7 @@ try {
                 JOIN formularios f ON f.for_id = s.sec_formulario_pertenece
                 JOIN 
                     (SELECT @rownum := 0) AS dummy
-                WHERE f.for_id = ?
+                WHERE f.for_id = ? AND p.pre_estado = 1 AND s.sec_estado = 1
                 GROUP BY s.sec_formulario_pertenece, r.otr_pregunta_pertenece, respuesta_texto_limpiado
                 ORDER BY s.sec_formulario_pertenece, r.otr_pregunta_pertenece, respuesta_texto_limpiado
             )
@@ -28,7 +28,7 @@ try {
                 JOIN secciones s ON p.pre_seccion_pertenece = s.sec_id
                 JOIN opciones op ON op.opc_id = re.res_opcion_pertenece
                 JOIN formularios f ON f.for_id = s.sec_formulario_pertenece
-                WHERE f.for_id = ?
+                WHERE f.for_id = ? AND p.pre_estado = 1 AND s.sec_estado = 1
                 GROUP BY s.sec_formulario_pertenece, re.res_pregunta_pertenece, re.res_opcion_pertenece, re.res_texto, op.opc_padre
                 ORDER BY s.sec_formulario_pertenece, re.res_pregunta_pertenece, re.res_opcion_pertenece
             ) AS consulta_principal

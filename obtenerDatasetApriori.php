@@ -57,9 +57,6 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
         $select_clause = implode(",", $select_fields);
 
         $sql_consulta = "SELECT
-            r.res_encuestado_id,
-            r.res_encuestado_ip,
-            MIN(r.res_fecha_envio) AS fecha_envio,
             $select_clause
         FROM
             respuestas r
@@ -70,9 +67,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
         WHERE
             r.res_formulario_pertenece = :formulario_id
         GROUP BY
-            r.res_encuestado_id, r.res_encuestado_ip
-        ORDER BY
-            fecha_envio;";
+            r.res_encuestado_id, r.res_encuestado_ip;";
 
         // Ejecutar la consulta
         $consulta_consulta = $pdo->prepare($sql_consulta);
@@ -86,9 +81,8 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
                 $dataset[] = $row_consulta;
             }
 
-            // Devolver el dataset como respuesta
             http_response_code(200);
-            echo json_encode($dataset);
+            echo json_encode(array_values($dataset));
         } else {
             http_response_code(404); // Not Found
             echo json_encode(array("error" => "No se encontraron respuestas para el formulario ID $formulario_id"));

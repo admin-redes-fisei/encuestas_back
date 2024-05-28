@@ -26,9 +26,17 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
         // Devuelve los datos de los tableros como JSON, o un arreglo vacío si no se encontraron
         echo json_encode($tableros);
     } else {
-        // Parámetro faltante
-        http_response_code(400); // Bad Request
-        echo json_encode(array("mensaje" => "Falta el parámetro formulario_id"));
+        $tab_facultad_pertenece = $_GET['tab_facultad_pertenece'];
+        // Prepara la consulta SQL con el parámetro proporcionado
+        $consulta = $pdo->prepare("SELECT * FROM tableros WHERE tab_facultad_pertenece = :tab_facultad_pertenece AND tab_formulario_pertenece IS NULL");
+        $consulta->bindParam(':tab_facultad_pertenece', $tab_facultad_pertenece);
+        $consulta->execute();
+
+        // Obtiene el resultado de la consulta
+        $tableros = $consulta->fetchAll(PDO::FETCH_ASSOC);
+
+        // Devuelve los datos de los tableros como JSON, o un arreglo vacío si no se encontraron
+        echo json_encode($tableros);
     }
 } else {
     // Método no permitido

@@ -15,6 +15,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
     $consulta = $pdo->prepare("SELECT f.*, a.fac_nombre
     FROM formularios f
     JOIN facultades a ON f.for_facultad_pertenece = a.fac_id
+    ORDER BY f.for_estado DESC, f.for_fecha_creacion DESC;
     ");
     $consulta->execute();
 

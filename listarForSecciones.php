@@ -16,7 +16,9 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
         $formulario_id = $_GET['formulario_id'];
 
         // Consulta para obtener los datos del formulario
-        $consultaFormulario = $pdo->prepare("SELECT * FROM formularios WHERE for_id = :formulario_id");
+        $consultaFormulario = $pdo->prepare("SELECT f.*, a.fac_nombre FROM formularios f
+        JOIN facultades a ON f.for_facultad_pertenece = a.fac_id 
+        WHERE for_id = :formulario_id");
         $consultaFormulario->bindParam(':formulario_id', $formulario_id);
         $consultaFormulario->execute();
         $formulario = $consultaFormulario->fetch(PDO::FETCH_ASSOC);
