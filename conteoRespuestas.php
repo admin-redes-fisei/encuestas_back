@@ -11,7 +11,7 @@ include 'conexion.php';
 try {
     $sql = "WITH autoincrement AS (
                 SELECT s.sec_formulario_pertenece, f.for_nombre, r.otr_pregunta_pertenece, p.pre_alias, p.pre_titulo, p.pre_texto , @rownum := @rownum + 1 AS id_autoincremental, TRIM(r.otr_respuesta_texto) AS respuesta_texto_limpiado, '' as opc_padre, COUNT(TRIM(r.otr_respuesta_texto)) AS count_respuesta
-                FROM opciones_otra_limpio r
+                FROM opciones_otra r
                 JOIN preguntas p ON p.pre_id = r.otr_pregunta_pertenece
                 JOIN secciones s ON p.pre_seccion_pertenece = s.sec_id
                 JOIN formularios f ON f.for_id = s.sec_formulario_pertenece

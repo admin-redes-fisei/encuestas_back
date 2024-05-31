@@ -23,7 +23,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
                     WHERE r.res_formulario_pertenece = :formulario_id
                     UNION
                     SELECT o.otr_pregunta_pertenece AS pregunta_id, p2.pre_numero as numero
-                    FROM opciones_otra_limpio o 
+                    FROM opciones_otra o 
                     LEFT JOIN respuestas r2 ON o.otr_encuestado_id = r2.res_encuestado_id 
                     LEFT JOIN preguntas p2 ON o.otr_pregunta_pertenece = p2.pre_id
                     WHERE r2.res_formulario_pertenece = :formulario_id
@@ -64,7 +64,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
         FROM
             respuestas r
         LEFT JOIN
-            opciones_otra_limpio o ON o.otr_encuestado_id = r.res_encuestado_id
+            opciones_otra o ON o.otr_encuestado_id = r.res_encuestado_id
         LEFT JOIN
             opciones op ON op.opc_id = r.res_opcion_pertenece
         WHERE

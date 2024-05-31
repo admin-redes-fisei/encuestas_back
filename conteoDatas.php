@@ -88,14 +88,14 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
         $sql_otras = "SELECT f.for_nombre AS nombre_encuesta, 
                     (
                         SELECT COUNT(DISTINCT o.otr_encuestado_id)
-                        FROM opciones_otra_limpio o
+                        FROM opciones_otra o
                         JOIN preguntas p ON p.pre_id = o.otr_pregunta_pertenece
                         JOIN secciones s ON p.pre_seccion_pertenece = s.sec_id
                         JOIN formularios f ON f.for_id = s.sec_formulario_pertenece
                         WHERE f.for_id = :id_encuesta
                         AND o.otr_encuestado_id IN (
                             SELECT otr_encuestado_id
-                            FROM opciones_otra_limpio 
+                            FROM opciones_otra 
                             WHERE $sql_filtro_otr
                             GROUP BY otr_encuestado_id
                             ";
@@ -107,7 +107,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
                 p.pre_titulo AS titulo_pregunta, p.pre_texto AS texto_pregunta, p.pre_tipo AS tipo_pregunta, 
                 0 AS id_opcion, o.otr_respuesta_texto AS texto_opcion, NULL AS padre_opcion,
                 COUNT(TRIM(o.otr_respuesta_texto)) AS numero_selecciones
-                FROM opciones_otra_limpio o
+                FROM opciones_otra o
                 JOIN preguntas p ON p.pre_id = o.otr_pregunta_pertenece
                 JOIN secciones s ON p.pre_seccion_pertenece = s.sec_id
                 JOIN formularios f ON f.for_id = s.sec_formulario_pertenece
@@ -115,7 +115,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
         if ($sql_filtro_otr !== 1) {
             $sql_otras .= "AND o.otr_encuestado_id IN (
                         SELECT otr_encuestado_id
-                        FROM opciones_otra_limpio
+                        FROM opciones_otra
                         WHERE $sql_filtro_otr
                         GROUP BY otr_encuestado_id
                         ";

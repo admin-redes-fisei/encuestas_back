@@ -17,7 +17,7 @@ try {
             $sqlEncuesta = "SELECT for_nombre, COUNT(DISTINCT r.res_encuestado_id) AS total_encuestados
                             FROM respuestas r
                             JOIN formularios f ON f.for_id = r.res_formulario_pertenece
-                        LEFT JOIN opciones_otra_limpio op ON r.res_encuestado_id = op.otr_encuestado_id
+                        LEFT JOIN opciones_otra op ON r.res_encuestado_id = op.otr_encuestado_id
                         WHERE r.res_formulario_pertenece = :id AND (r.res_texto = :filter OR TRIM(op.otr_respuesta_texto) = :filter )
                         GROUP BY f.for_nombre;";
             $stmtEncuesta = $pdo->prepare($sqlEncuesta);
@@ -58,12 +58,12 @@ try {
     WHERE res_texto = :filter " : "";
     $sqlPreguntas .= " ), otras_filtradas AS (
                         SELECT DISTINCT otr_encuestado_id
-                        FROM opciones_otra_limpio ";
+                        FROM opciones_otra ";
     $sqlPreguntas .= isset($_GET['filter']) ? "
     WHERE TRIM(otr_respuesta_texto) = :filter " : "";
     $sqlPreguntas .= " ), autoincrement AS (
                         SELECT s.sec_formulario_pertenece, f.for_nombre, r.otr_pregunta_pertenece AS id_pregunta, p.pre_alias, p.pre_titulo, p.pre_texto, p.pre_tipo , @rownum := @rownum + 1 AS id_opcion, TRIM(r.otr_respuesta_texto) AS respuesta_texto, '' as opc_padre, COUNT(TRIM(r.otr_respuesta_texto)) AS count_respuesta
-                        FROM opciones_otra_limpio r
+                        FROM opciones_otra r
                         JOIN preguntas p ON p.pre_id = r.otr_pregunta_pertenece
                         JOIN secciones s ON p.pre_seccion_pertenece = s.sec_id
                         JOIN formularios f ON f.for_id = s.sec_formulario_pertenece
