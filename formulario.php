@@ -34,7 +34,7 @@ try {
             LEFT JOIN encuestasdb.opciones o ON p.pre_id = o.opc_pregunta_pertenece 
             JOIN encuestasdb.secciones s ON p.pre_seccion_pertenece = s.sec_id
             JOIN encuestasdb.formularios f ON s.sec_formulario_pertenece = f.for_id
-            WHERE p.pre_eliminado = 0 AND p.pre_estado = 1 AND (o.opc_eliminado = 0 OR o.opc_eliminado IS NULL) AND s.sec_estado = 1 AND s.sec_eliminado = 0 AND f.for_alias = ? 
+            WHERE p.pre_eliminado = 0 AND p.pre_estado = 1 AND (o.opc_eliminado = 0 OR o.opc_eliminado IS NULL) AND s.sec_estado = 1 AND s.sec_eliminado = 0 AND f.for_alias = ? AND f.for_estado = 1
             GROUP BY p.pre_id, p.pre_numero, p.pre_titulo, p.pre_alias, p.pre_tipo 
             ORDER BY s.sec_numero, p.pre_numero;";
 
