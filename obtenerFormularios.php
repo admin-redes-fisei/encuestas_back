@@ -14,7 +14,7 @@ try {
         // Consulta SQL para obtener las preguntas y opciones de respuesta del formulario específico de la facultad
         $sql = "SELECT f.for_id, f.for_nombre, COUNT(DISTINCT r.res_encuestado_id) AS cantidad_respuestas
                 FROM formularios f
-                JOIN respuestas r ON r.res_formulario_pertenece = f.for_id
+                LEFT JOIN respuestas r ON r.res_formulario_pertenece = f.for_id
                 WHERE f.for_facultad_pertenece = :facultad_id AND f.for_estado = 1
                 GROUP BY f.for_id";
 
