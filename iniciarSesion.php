@@ -25,7 +25,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             u.usu_clave, u.usu_facultad_pertenece, f.fac_nombre, u.usu_tipo
             FROM usuarios u
             LEFT JOIN facultades f ON u.usu_facultad_pertenece = f.fac_id
-            WHERE usu_correo = ?");
+            WHERE usu_correo = ? AND (f.fac_estado = 1 AND f.fac_eliminado = 0 OR u.usu_facultad_pertenece IS NULL)");
             $consulta->execute([$usuario]);
             
         }else {
@@ -33,8 +33,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             u.usu_clave, u.usu_facultad_pertenece, f.fac_nombre, u.usu_tipo
             FROM usuarios u
             LEFT JOIN facultades f ON u.usu_facultad_pertenece = f.fac_id
-            WHERE usu_correo = ? 
-            OR usu_usuario = ?");
+            WHERE (usu_correo = ? 
+            OR usu_usuario = ?) AND (f.fac_estado = 1 AND f.fac_eliminado = 0 OR u.usu_facultad_pertenece IS NULL)");
             $consulta->execute([$usuario, $usuario]);
         }
 
