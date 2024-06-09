@@ -17,34 +17,40 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Verifica si se ha enviado el id del formulario
     if (isset($datos['for_id'])) {
         $for_id = $datos['for_id'];
+        $for_estado = $datos['for_estado'];
 
         // Inicia una transacción
         $pdo->beginTransaction();
 
         try {
+            if ($for_estado == 1) {
             // Actualiza el estado del formulario especificado a 1 (activo)
-            $consulta = $pdo->prepare("UPDATE formularios SET for_estado = 1 WHERE for_id = :for_id");
-            $consulta->bindParam(':for_id', $for_id);
-            $consulta->execute();
+                $consulta = $pdo->prepare("UPDATE formularios SET for_estado = 1 WHERE for_id = :for_id");
+                $consulta->bindParam(':for_id', $for_id);
+                $consulta->execute();
 
-            // Obtiene el tipo y la facultad del formulario activado
-            $consulta = $pdo->prepare("SELECT for_tipo, for_facultad_pertenece FROM formularios WHERE for_id = :for_id");
-            $consulta->bindParam(':for_id', $for_id);
-            $consulta->execute();
-            $formulario = $consulta->fetch(PDO::FETCH_ASSOC);
+                // Obtiene el tipo y la facultad del formulario activado
+                $consulta = $pdo->prepare("SELECT for_tipo, for_facultad_pertenece FROM formularios WHERE for_id = :for_id");
+                $consulta->bindParam(':for_id', $for_id);
+                $consulta->execute();
+                $formulario = $consulta->fetch(PDO::FETCH_ASSOC);
 
-            if ($formulario) {
-                $for_tipo = $formulario['for_tipo'];
-                $for_facultad = $formulario['for_facultad_pertenece'];
+                if ($formulario) {
+                    $for_tipo = $formulario['for_tipo'];
+                    $for_facultad = $formulario['for_facultad_pertenece'];
 
-                // Desactiva otros formularios del mismo tipo y facultad
-                $consulta = $pdo->prepare("UPDATE formularios SET for_estado = 0 WHERE for_tipo = :for_tipo AND for_facultad_pertenece = :for_facultad AND for_id != :for_id");
-                $consulta->bindParam(':for_tipo', $for_tipo);
-                $consulta->bindParam(':for_facultad', $for_facultad);
+                    // Desactiva otros formularios del mismo tipo y facultad
+                    $consulta = $pdo->prepare("UPDATE formularios SET for_estado = 0 WHERE for_tipo = :for_tipo AND for_facultad_pertenece = :for_facultad AND for_id != :for_id");
+                    $consulta->bindParam(':for_tipo', $for_tipo);
+                    $consulta->bindParam(':for_facultad', $for_facultad);
+                    $consulta->bindParam(':for_id', $for_id);
+                    $consulta->execute();
+                }
+            } else {
+                $consulta = $pdo->prepare("UPDATE formularios SET for_estado = 0 WHERE for_id = :for_id");
                 $consulta->bindParam(':for_id', $for_id);
                 $consulta->execute();
             }
-
             // Confirma la transacción
             $pdo->commit();
             http_response_code(201); // Created
